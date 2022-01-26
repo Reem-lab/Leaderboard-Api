@@ -4,6 +4,8 @@
 
 body {
   color: rgb(90 5 5);
+  margin: 0;
+  padding: 0;
 }
 
 .Whole-container,
@@ -80,6 +82,8 @@ body {
   display: flex;
   flex-direction: column;
   width: 500px;
+  height: 300px;
+  overflow-y: scroll;
 }
 
 .scores .score {
