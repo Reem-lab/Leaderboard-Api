@@ -2,9 +2,9 @@
 
 <!-- Feel Free to Add, Update, Delete Any Section you find needs so -->
 
-# To Do List 
+# LeaderBoard
 
-> This project about I will get data from API and i will display the name and the score in the screen and user can also enter his/her name and score. 💯
+> This project A small game displays to user his score and his name, you can get it from its API and post new players and their scores to the API. 💯
 
 <!-- <img src="Capture.PNG" width="70%" /> -->
 
