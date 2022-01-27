@@ -3,62 +3,70 @@ import './style.css';
 const inputName = document.querySelector('.input-name');
 const inputScore = document.querySelector('.input-score');
 const scoresDiv = document.querySelector('.scores');
-const submit = document.querySelector('.btn');
+const formDiv = document.querySelector('.form-div');
 
-let arrayOfScores = [];
-
-// ckeck if there is any thing in local storage
-if (localStorage.getItem('Scores')) {
-  arrayOfScores = JSON.parse(localStorage.getItem('Scores'));
-}
-
-// function to add data on local storage
-const addDataToLocal = (arrayOfScores) => {
-  window.localStorage.setItem('Scores', JSON.stringify(arrayOfScores));
+const getScoreArr = async () => {
+  const response = await fetch(
+    'https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/bktuJZxafpQXjsz0DsIy/scores/',
+  );
+  return response.json();
 };
 
-function addElementsToPageFrom(arrayOfScores) {
+const displayElemnt = (arrayOfScores) => {
   // empty score div if has any data
   scoresDiv.innerHTML = ' ';
 
   // looping arryof scores
-  arrayOfScores.forEach((score) => {
+  arrayOfScores.forEach((elemnt) => {
     // create main div
     const div = document.createElement('div');
     div.className = 'score';
-    div.setAttribute('data-id', score.id);
+    // div.setAttribute('data-id', score.id);
 
     const nameWithScore = document.createElement('p');
-    const title = `${score.name} : ${score.scr}`;
+    const title = `${elemnt.user} : ${elemnt.score}`;
     nameWithScore.textContent = title;
     div.appendChild(nameWithScore);
 
     scoresDiv.appendChild(div);
   });
-}
-
-addElementsToPageFrom(arrayOfScores);
-
-const addScoreToArray = (nameText, num) => {
-  const score = {
-    id: Date.now(), // make it quall to time to be different
-    name: nameText,
-    scr: num,
-  };
-  // push my scores to array
-  arrayOfScores.push(score);
-
-  // Add elemnt to my page
-  addElementsToPageFrom(arrayOfScores);
-
-  // add to local storage
-  addDataToLocal(arrayOfScores);
 };
 
-submit.onclick = (e) => {
+const addElementsToPageFrom = async () => {
+  await getScoreArr().then((scores) => {
+    displayElemnt(scores.result);
+  });
+};
+
+const addScoreToArray = async (nameText, num) => {
+  await fetch(
+    'https://us-central1-js-capstone-backend.cloudfunctions.net/api/games/bktuJZxafpQXjsz0DsIy/scores/',
+    {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user: `${nameText}`,
+        score: `${num}`,
+      }),
+    },
+  );
+};
+
+formDiv.addEventListener('submit', (e) => {
   e.preventDefault();
-  if (inputName !== ' ' && inputScore !== ' ') addScoreToArray(inputName.value, inputScore.value);
-  inputName.value = ''; // empty the input
-  inputScore.value = ' ';
-  inputName.focus();
-};
+  if (inputName !== ' ' && inputScore !== ' ') {
+    const name = document.getElementById('name').value;
+    const score = document.getElementById('score').value;
+    addScoreToArray(name, score);
+    inputName.value = '';
+    inputScore.value = '';
+    inputName.focus();
+  }
+});
+
+const refBtn = document.querySelector('.refresh');
+
+refBtn.addEventListener('click', addElementsToPageFrom);
