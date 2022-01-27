@@ -6,7 +6,7 @@
 
 > This project A small game displays to user his score and his name, you can get it from its API and post new players and their scores to the API. 💯
 
-<!-- <img src="Capture.PNG" width="70%" /> -->
+<img src="Capture.PNG" width="70%" />
 
 ## Built With
 
